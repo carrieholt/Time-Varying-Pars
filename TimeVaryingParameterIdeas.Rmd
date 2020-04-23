@@ -1,0 +1,108 @@
+---
+title: "Time-Varying Parameter Project Ideas"
+author: "Various"
+date: "April 23, 2020"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+bibliography: bibliography.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Context
+
+Several approaches have been developed to account for variability in biological parameters when informing management advice [@pinsky2014; @punt2013a; @szuwalski2016]. For multi-decadal scale variability, management parameters such as biological reference points can be estimated using only data after a shift has been detected (e.g., as applied to Snow Crab in the eastern Bering Sea, @szuwalski2012), or using a "moving window" approach that selects recent periods of data for inclusion in assessments [@punt2013a].  Alternatively, time-varying parameters reflecting annual to multiyear-scale variability can be incorporated into assessment and management using more complex analytical approaches where parameters vary according to a random walk within state-space models, or more specifically, using a Kalman filter [@schnute1994; @peterman2000]. That technique derives annual parameters recursively from the previous year's estimate, uncertainty in that estimate, and model variances. Within multi-stock analyses, an alternative is to include a common year-effect in the stock-recruitment model that captures extreme high and low survival events that are common across stocks (e.g., marine heat wave or 2009/2010 extreme events).
+
+Intuitively, accounting for changes in underlying parameters when making management decisions should lead to an improved ability to meet conservation and fisheries management objectives. However, studies evaluating the inclusion of time-varying parameters to adjust harvest control rules in fisheries management produce mixed results [@punt2013a].
+
+## Questions
+
+There are several shortcomings of the previous work and numerous associated questions which we could address. Below a few are highlighted based on our earlier discussions.
+
+**1.**  Both Kalman filter and recursive Bayes models have been used to estimate time-varying productivity, but they have not been rigorosly compared. Although the Kalman filter is an analytical solution to the recursive model, several forms of the recursive Bayes model have been applied (e.g., 2 vs 3 variance terms) and the impacts of those formulations on posterior outputs are uncertain. 
+
+|   Possible components:
+
+  a. Compare and document performance of Kalman Filter vs. Recursive Bayes models with different model formulations and priors (Catarina has perhaps done this...)
+
+  b. Extend Recursive Bayes to include time-varying capacity
+
+
+
+**2.**  For Pacific salmon, productivity is assumed to vary over time while capacity is typically held constant despite wide-spread evidence for changes in habitat quality and quantity. Although Britten et al. [-@britten2016] extended the time-varying stock-recruitment model to include time-varying productivity and capacity, this has not been applied to Pacific salmon. An alternative approach of regime-based models that use change points to identify regimes, e.g., Pruned Exact Linear Time algorithm, [@szuwalski2019], has also not been rigorously evaluated for Pacific salmon (but see @falcy2018). Can we apply these methods to available stock-recruitment data to show evidence for time-varying productivity and capacity for Pacific salmon in BC or beyond? If the available data are insufficient to estimate both time-varying productivity and capacity, we could instead ask under which hypothetical conditions (monitoring, assessment uncertainty, etc.) might it be possible to identify time-varying productivity vs capacity in simulation? Also, under what levels of time-varying productivity vs capacity does this variability matter for management (e.g., impact estimation of reference points)?
+
+|   Possible components:
+
+  a. Meta-analyses of stock-recruitment relationships to identify evidence for time-varying parameters using data sets within DFO and possibly the US.
+  
+  + Britten et al.'s [-@britten2016] time-varying model (possibly coded in TMB)
+  + Recursive Bayes model with time-varying productivity and capacity
+  + Regime-based methods with change point detection
+  + Stock-recruitment model with co-variates, e.g., marine survival, juvenile abundance, environmental variables
+    
+  b.	Simulation study 
+  
+  + Same modelling approaches, but evaluatied in simulation
+    
+  c. Impacts on derived reference points and recommended management actions (both from meta-analyses and in simulation)
+  
+  + For example, implications for RPAs, conservation strategies, and rebuilding plans. We initially considered including time-varying capacity parameter in *samSim* to inform rebuilding plans, but have not implemented.
+
+
+
+**3.** How does the stock-recruitment curve shift when productivity changes?  Does *S*~MAX~ remain constant as productivity declines and *S*~eq~ declines (common assumption, shifting the curve downwards),  or does *S*~eq~ remain constant and *S*~MAX~ increases as productivity declines (i.e., the peak of the curve shifts right, an alternative assumption supported by some local biologists), or both (as in time-varying productivity and capacity).  This is a particular concern for Southern BC Chinook salmon, which is limiting progress on the evaluation of management strategies for rebuilding.
+
+|   Possible components:
+
+  a. Meta-analyses of time-varying stock-recruitment relationships for Chinook salmon, dividing data into separate periods with overlapping windows of time to evaluate if  *S*~MAX~ or *S*~eq~ remain constant over time.
+  
+  b. Simulation evaluation of the impacts of incorrect assumptions about constant *S*~MAX~ vs. *S*~eq~ as productivity changes. How much do these alternative assumptions matter?
+  
+  c. Evaluate the hypothesis that observed declining mean spawning age has caused an increase in *S*~MAX~ (measured in numbers of fish) and decrease in productivity (lower survival chances of survival for each egg) using *samSim*, as per Catarina's hypothesis. Are the observed declines in mean spawning large enough to generate a detectable decline in productivity?
+
+
+
+**4.** For multi-stock analyses, there are a variety of other model formulations that are being considered for Nass/Skeena sockeye that could be applied more broadly, such as models including a common year-effect and/or a common regime-effect. Models with co-variates (e.g., Chinook model with marine survival as a co-variate) could also be analysed in a hierarchical way where the survival effect is shared among stock (Catarina, is this already done for Chinook?). These methods could be compared against more standard (single stock) approaches for including temporal variability in parameters using empirical data and/or in simulation. 
+
+
+
+**5.** Perhaps outside the scope of this work, I am also interested in parameterizing samSim to allow separate freshwater and marine life stages for Chinook salmon to inform rebuilding plans that include both freshwater and marine management levers. Where possible, it would be great to disentangle freshwater density-dependent processes from time-varying marine survival. Cam wrote a SPERA proposal for this in 2018, which was unfortunately not funded.
+
+
+## Data Sources
+
+
+**Area-based data sets: limited in geographic scope but high quality data**
+
++ Fraser Sockeye data set (n=19, ranging between 1950-2019 for spawners) 
+
++ Southern BC Chinook salmon repository (n=2 with recruitment, years?)
+
++ Nass/Skeena Sockeye repository (n=?, ranging between 1954-2015 for spawners)
+
++ Interior Fraser Coho data set (n=5, 1998-2013 for R/S)
+
+**Regional Stock-Recruitment datasets within BC: comprehensive but limited quality control**
+
++ Kim Hyatt's Sockeye data set (n=6, ranging between 1975-2018 for spawners)
+
++ Ogden et al. [-@ogden2015] within BC (sockeye, pink, chum, n=160, ranging between 1950-2013 for R/S)
+
++ Pacific Salmon Explorer, derived from LGL and DFO staff, within BC (sockeye, pink, chum, chinook, coho, n=?, ranging between 1950-2017 for spawners)
+
+**Outside BC**
+
++ Brendan's sockeye NCEAS project (n=64, ?-2017)
+
++ Mike Malick's chum and pink datasets (n = 99, questionable quality of chum data). 
+
++ NCEAS project updating Chinook and Coho datasets (stocks?, years?)
+
+
+## References

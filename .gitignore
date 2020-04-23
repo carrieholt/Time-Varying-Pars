@@ -21,3 +21,4 @@ knitr-cache
 hake-example.tex
 allData.rds
 myNotes.*
+.Rproj.user
